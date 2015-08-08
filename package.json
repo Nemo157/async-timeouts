@@ -1,0 +1,15 @@
+{
+  "name": "async-timeouts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test.js",
+  "scripts": {
+    "test": "babel-node test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^5.8.21",
+    "js-csp": "^0.4.1"
+  }
+}
