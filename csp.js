@@ -36,10 +36,9 @@ function* handle (request) {
 }
 
 export function run (requests, callback) {
-  console.log('csp', 'start')
   csp.go(function* () {
-    var request
-    while ((request = requests.shift())) {
+    console.log('csp', 'start')
+    for (var request of requests) {
       request = request()
       console.log('csp', request.id, 'start', request.details)
       try {
@@ -58,9 +57,16 @@ export function run (requests, callback) {
 }
 
 export function runAsync (requests, callback) {
-  console.log('csp', 'start')
   csp.go(function* () {
-    let holders = requests.map(req => req()).map(req => ({ channel: csp.go(handle, [req]), request: req }))
+    console.log('csp', 'start')
+    let holders = requests.map(request => {
+      request = request()
+      console.log('csp', request.id, 'start', request.details)
+      return {
+        channel: csp.go(handle, [request]),
+        request
+      }
+    })
     while (holders.length) {
       let done = yield csp.alts(holders.map(req => req.channel))
       let holder = holders.find(req => req.channel === done.channel)

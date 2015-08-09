@@ -1,6 +1,7 @@
 import { CancellationTokenSource } from './cancel'
 import * as callbacks from './callbacks'
 import * as promises from './promises'
+import * as async from './async'
 import * as csp from './csp'
 
 let id = 0
@@ -18,7 +19,9 @@ let requests = [
 
 callbacks.run(requests.slice(), () =>
   promises.run(requests.slice(), () =>
-    csp.run(requests.slice(), () => 
-      callbacks.runAsync(requests.slice(), () =>
-        promises.runAsync(requests.slice(), () =>
-          csp.runAsync(requests.slice(), () => {}))))))
+    async.run(requests.slice(), () =>
+      csp.run(requests.slice(), () =>
+        callbacks.runAsync(requests.slice(), () =>
+          promises.runAsync(requests.slice(), () =>
+            async.runAsync(requests.slice(), () =>
+              csp.runAsync(requests.slice(), () => {}))))))))
